@@ -3,8 +3,33 @@ let apiKey = "46822744";
 let sessionId = "1_MX40NjgyMjc0NH5-MTU5Mzc0MDI1Nzk1MH5IRkVobzlHWUUyVzdNSWJ6QnZGYnJEZit-fg";
 let token = "T1==cGFydG5lcl9pZD00NjgyMjc0NCZzaWc9MTVhMDQ0NzFkMTE0NTE3ODM1OTlkNTM1YTQ0MWFlMDYxYWQyMGExMzpzZXNzaW9uX2lkPTFfTVg0ME5qZ3lNamMwTkg1LU1UVTVNemMwTURJMU56azFNSDVJUmtWb2J6bEhXVVV5VnpkTlNXSjZRblpHWW5KRVppdC1mZyZjcmVhdGVfdGltZT0xNTkzNzQwMzA1Jm5vbmNlPTAuNzk4NDY3MzU5MDU2NzAyJnJvbGU9cHVibGlzaGVyJmV4cGlyZV90aW1lPTE1OTYzMzIzMDMmaW5pdGlhbF9sYXlvdXRfY2xhc3NfbGlzdD0=";
 
-// (optional) add server code here
-initializeSession();
+
+let onGoingCall = false;
+
+let receiveCallsBtn = document.getElementById('receive-calls-btn');
+let videoCallContainer = document.getElementById('video-call');
+let voiceCallContainer = document.getElementById('voice-call');
+
+let videoOnBtn = document.getElementsByClassName('fa-video')[0];
+let videoOffNtn = document.getElementsByClassName('fa-video-slash')[0];
+
+videoOnBtn.addEventListener('click', () => {
+    videoCallContainer.style.display = 'none';
+    voiceCallContainer.style.display = 'block';
+});
+
+videoOffNtn.addEventListener('click', () => {
+    videoCallContainer.style.display = 'flex';
+    voiceCallContainer.style.display = 'none';
+})
+
+receiveCallsBtn.addEventListener('click' , (e) => {
+    onGoingCall = true;
+    initializeSession();
+    videoCallContainer.style.display = 'flex';    
+});
+
+
 
 // Handling all of our errors here by alerting them
 function handleError(error) {

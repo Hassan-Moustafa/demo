@@ -1,35 +1,33 @@
 /* body, html {
     background-color: gray;
     height: 100%;
-}
+} */
 
-#videos {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    margin-left: auto;
-    margin-right: auto;
+#video-call, #voice-call {
+    display: none;
 }
 
 #subscriber {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
+    background-color: rgb(187, 182, 182);
+    height: 400px;
     z-index: 10;
 }
 
 #publisher {
     position: absolute;
-    width: 360px;
-    height: 240px;
-    bottom: 10px;
-    left: 10px;
+    width: 150px;
+    height: 150px;
+    top: 0px;
+    right: 0px;
     z-index: 100;
-    border: 3px solid white;
     border-radius: 3px;
-} */
+}
+
+.video-controls{
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+}
 
 
 .fixed-circle {
@@ -99,7 +97,13 @@ button:focus{
 }
 
 .voice-chat-window{
-    height: 300px;
+    height: 400px;
+}
+
+.voice-controls {
+    position: absolute;
+    width: 100%;
+    bottom: 112px;
 }
 
 .fa-user {
@@ -120,18 +124,18 @@ button:focus{
     background-color: red;
 }
 
-.fa-microphone, .fa-video-slash {
+.fa-microphone, .fa-video-slash, .fa-video {
     border: 1px solid rgb(233, 233, 233);
     padding: 10px 12px;
     border-radius: 20px;
     cursor: pointer;
 }
 
-.fa-microphone:hover, .fa-video-slash:hover{
+.fa-microphone:hover, .fa-video-slash:hover, .fa-video:hover{
     background-color: rgb(238, 238, 238);
 }
 
-.fa-video-slash {
+.fa-video-slash, .fa-video {
     padding: 10px 8px;
 }
 
