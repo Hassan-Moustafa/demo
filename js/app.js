@@ -5,10 +5,12 @@ let token = "T1==cGFydG5lcl9pZD00NjgyMjc0NCZzaWc9MTVhMDQ0NzFkMTE0NTE3ODM1OTlkNTM
 
 let isVoiceWorking = true;
 let isVideoWorking = true;
+let callIsWorking = false;
 
 let session;
 let subscriber;
 let publisher;
+
 
 let receiveCallsBtn = document.getElementById('receive-calls-btn');
 let videoCallContainer = document.getElementById('video-call');
@@ -25,6 +27,17 @@ function publichVideoStatus(status) {
 
 function publichVoiceStatus(status) {
     publisher.publishAudio(status);
+}
+
+function handlePropertChange(event) {
+    let subscribers = session.getSubscribersForStream(event.stream);
+    if(event.changedProperty === 'hasVideo' && event.newValue !== event.oldValue && subscribers.length > 0) {
+        if(event.newValue) {
+            voiceCallContainer.style.display = 'none';
+        } else {
+            voiceCallContainer.style.display = 'block';
+        }
+    }
 }
 
 toggleVideoBtn.addEventListener('click', () => {
@@ -55,16 +68,33 @@ toggleMicBtn.addEventListener('click', () => {
 })
 
 closeCallBtn.addEventListener('click', () => {
+    // if(subscriber) {
+    //     session.unsubscribe(subscriber);
+    //     subscriber.destroy();
+    //     subscriber = null;
+    // }
+    
+    // if(publisher) {
+    //     session.unpublish(publisher);
+    //     publisher.destroy();
+    //     publisher = null;
+    // }
+
     session.disconnect();
+    // session = null;
+
+    callIsWorking = false;
     videoCallContainer.style.display = 'none';
 });
 
 receiveCallsBtn.addEventListener('click' , (e) => {
-    initializeSession();
-    videoCallContainer.style.display = 'flex';    
+
+    if(!callIsWorking) {
+        initializeSession();
+        videoCallContainer.style.display = 'flex';
+        callIsWorking = true;
+    }
 });
-
-
 
 
 // Handling all of our errors here by alerting them
@@ -73,29 +103,25 @@ function handleError(error) {
       alert(error.message);
     }
 }
+
+
   
 function initializeSession() {
-    session = OT.initSession(apiKey, sessionId);
 
+    if(!session) {
+        session = OT.initSession(apiKey, sessionId);
+        session.on('streamCreated', function(event) {
+            console.log('subscribe');
+            subscriber = session.subscribe(event.stream, 'subscriber', {
+                insertMode: 'append',
+                width: '100%',
+                height: '100%'
+            }, handleError);
+        });
+    }
     // Subscribe to a newly created stream
-    session.on('streamCreated', function(event) {
-        subscriber = session.subscribe(event.stream, 'subscriber', {
-          insertMode: 'append',
-          width: '100%',
-          height: '100%'
-        }, handleError);
-    });
 
-    session.on('streamPropertyChanged', function(event) {
-        let subscribers = session.getSubscribersForStream(event.stream);
-        if(event.changedProperty === 'hasVideo' && event.newValue !== event.oldValue && subscribers.length > 0) {
-            if(event.newValue) {
-                voiceCallContainer.style.display = 'none';
-            } else {
-                voiceCallContainer.style.display = 'block';
-            }
-        }
-    })
+    session.on('streamPropertyChanged', handlePropertChange);
 
     // Create a publisher
     publisher = OT.initPublisher('publisher', {
