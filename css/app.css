@@ -7,6 +7,14 @@
     display: none;
 }
 
+.voice-call-container {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    background-color: white;
+}
+
 #subscriber {
     background-color: rgb(187, 182, 182);
     height: 400px;
@@ -27,6 +35,7 @@
     position: absolute;
     bottom: 20px;
     width: 100%;
+    z-index: 100;
 }
 
 
@@ -124,14 +133,14 @@ button:focus{
     background-color: red;
 }
 
-.fa-microphone, .fa-video-slash, .fa-video {
+.fa-microphone, .fa-microphone-slash, .fa-video-slash, .fa-video {
     border: 1px solid rgb(233, 233, 233);
     padding: 10px 12px;
     border-radius: 20px;
     cursor: pointer;
 }
 
-.fa-microphone:hover, .fa-video-slash:hover, .fa-video:hover{
+.fa-microphone:hover, .fa-microphone-slash:hover, .fa-video-slash:hover, .fa-video:hover{
     background-color: rgb(238, 238, 238);
 }
 

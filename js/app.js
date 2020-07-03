@@ -3,31 +3,67 @@ let apiKey = "46822744";
 let sessionId = "1_MX40NjgyMjc0NH5-MTU5Mzc0MDI1Nzk1MH5IRkVobzlHWUUyVzdNSWJ6QnZGYnJEZit-fg";
 let token = "T1==cGFydG5lcl9pZD00NjgyMjc0NCZzaWc9MTVhMDQ0NzFkMTE0NTE3ODM1OTlkNTM1YTQ0MWFlMDYxYWQyMGExMzpzZXNzaW9uX2lkPTFfTVg0ME5qZ3lNamMwTkg1LU1UVTVNemMwTURJMU56azFNSDVJUmtWb2J6bEhXVVV5VnpkTlNXSjZRblpHWW5KRVppdC1mZyZjcmVhdGVfdGltZT0xNTkzNzQwMzA1Jm5vbmNlPTAuNzk4NDY3MzU5MDU2NzAyJnJvbGU9cHVibGlzaGVyJmV4cGlyZV90aW1lPTE1OTYzMzIzMDMmaW5pdGlhbF9sYXlvdXRfY2xhc3NfbGlzdD0=";
 
+let isVoiceWorking = true;
+let isVideoWorking = true;
 
-let onGoingCall = false;
+let session;
+let subscriber;
+let publisher;
 
 let receiveCallsBtn = document.getElementById('receive-calls-btn');
 let videoCallContainer = document.getElementById('video-call');
 let voiceCallContainer = document.getElementById('voice-call');
 
-let videoOnBtn = document.getElementsByClassName('fa-video')[0];
-let videoOffNtn = document.getElementsByClassName('fa-video-slash')[0];
+let closeCallBtn = document.getElementsByClassName('fa-phone')[0];
+let toggleVideoBtn = document.getElementById('toggle-video-btn');
+let toggleMicBtn = document.getElementById('toggle-mic-btn');
 
-videoOnBtn.addEventListener('click', () => {
-    videoCallContainer.style.display = 'none';
-    voiceCallContainer.style.display = 'block';
-});
 
-videoOffNtn.addEventListener('click', () => {
-    videoCallContainer.style.display = 'flex';
-    voiceCallContainer.style.display = 'none';
+function publichVideoStatus(status) {
+    publisher.publishVideo(status);
+}
+
+function publichVoiceStatus(status) {
+    publisher.publishAudio(status);
+}
+
+toggleVideoBtn.addEventListener('click', () => {
+    if(isVideoWorking) {
+        publichVideoStatus(false);
+        toggleVideoBtn.classList.remove('fa-video');
+        toggleVideoBtn.classList.add('fa-video-slash');
+    } else {
+        publichVideoStatus(true);
+        toggleVideoBtn.classList.remove('fa-video-slash');
+        toggleVideoBtn.classList.add('fa-video');
+    }
+    isVideoWorking = !isVideoWorking;
 })
 
+
+toggleMicBtn.addEventListener('click', () => {
+    if(isVoiceWorking) {
+        publichVoiceStatus(false);
+        toggleMicBtn.classList.remove('fa-microphone');
+        toggleMicBtn.classList.add('fa-microphone-slash');
+    } else {
+        publichVoiceStatus(true);
+        toggleMicBtn.classList.remove('fa-microphone-slash');
+        toggleMicBtn.classList.add('fa-microphone');
+    }
+    isVoiceWorking = !isVoiceWorking;
+})
+
+closeCallBtn.addEventListener('click', () => {
+    session.disconnect();
+    videoCallContainer.style.display = 'none';
+});
+
 receiveCallsBtn.addEventListener('click' , (e) => {
-    onGoingCall = true;
     initializeSession();
     videoCallContainer.style.display = 'flex';    
 });
+
 
 
 
@@ -39,19 +75,30 @@ function handleError(error) {
 }
   
 function initializeSession() {
-    let session = OT.initSession(apiKey, sessionId);
+    session = OT.initSession(apiKey, sessionId);
 
     // Subscribe to a newly created stream
     session.on('streamCreated', function(event) {
-        session.subscribe(event.stream, 'subscriber', {
+        subscriber = session.subscribe(event.stream, 'subscriber', {
           insertMode: 'append',
           width: '100%',
           height: '100%'
         }, handleError);
     });
 
+    session.on('streamPropertyChanged', function(event) {
+        let subscribers = session.getSubscribersForStream(event.stream);
+        if(event.changedProperty === 'hasVideo' && event.newValue !== event.oldValue && subscribers.length > 0) {
+            if(event.newValue) {
+                voiceCallContainer.style.display = 'none';
+            } else {
+                voiceCallContainer.style.display = 'block';
+            }
+        }
+    })
+
     // Create a publisher
-    let publisher = OT.initPublisher('publisher', {
+    publisher = OT.initPublisher('publisher', {
         insertMode: 'append',
         width: '100%',
         height: '100%'
