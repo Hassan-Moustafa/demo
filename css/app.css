@@ -1,4 +1,4 @@
-body, html {
+/* body, html {
     background-color: gray;
     height: 100%;
 }
@@ -29,4 +29,126 @@ body, html {
     z-index: 100;
     border: 3px solid white;
     border-radius: 3px;
+} */
+
+
+.fixed-circle {
+    /* margin-left: 50px; */
+    /* margin: 50px auto; */
+    /* margin-top: calc(50vh - 25px); */
+    border-radius: 50%;
+    border: 7px solid gainsboro;
+    width: 130px;
+    height: 130px;
+    position: relative;
 }
+
+.fixed-circle:before {
+    content:"";
+    display: block;
+    position: absolute;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    left:-8px;
+    top: -8px;
+    box-shadow: 0px 0px 0px 30px rgba(247,247,247,.5);
+}
+  
+.fixed-circle.animated:before {
+    animation-duration: 1.6s;
+    animation-fill-mode: both;
+    animation-iteration-count: infinite;
+    -webkit-animation-iteration-count: infinite;
+    animation-name: breathe;
+    -webkit-animation-name: breathe;
+}
+
+.header {
+    height: 80px;
+    background-color: #f7f7f7;
+}
+
+.dewa-logo {
+    width: 200px;
+}
+
+.receive-calls-btn {
+    border: 0;
+    background: #49a66c;
+    color: white;
+    border-radius: 20px;
+    padding: 8px 27px;
+}
+
+.receive-calls-btn:hover {
+    background: #219e51;
+}
+
+button:focus{
+    outline: none;
+}
+
+.title{
+    color: #343440;
+    font-weight: 500;
+}
+
+.call-type {
+    border-bottom: 1px solid #e2e1e1;
+}
+
+.voice-chat-window{
+    height: 300px;
+}
+
+.fa-user {
+    font-size: 30px;
+    color: #d6d6d6;
+}
+
+.fa-phone {
+    transform: rotate(224deg);
+    padding: 10px;
+    border-radius: 20px;
+    background-color: rgba(255, 0, 0, 0.712);
+    color: white;
+    cursor: pointer;
+}
+
+.fa-phone:hover {
+    background-color: red;
+}
+
+.fa-microphone, .fa-video-slash {
+    border: 1px solid rgb(233, 233, 233);
+    padding: 10px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.fa-microphone:hover, .fa-video-slash:hover{
+    background-color: rgb(238, 238, 238);
+}
+
+.fa-video-slash {
+    padding: 10px 8px;
+}
+
+/* @-webkit-keyframes breathe-circle {
+    from { box-shadow: 0px 0px 0px 5px  rgba(256,0,0,.2); }
+    35%  { box-shadow: 0px 0px 0px 15px rgba(256,0,0,.2); }
+    50%  { box-shadow: 0px 0px 0px 7px  rgba(256,0,0,.2); }
+    75%  { box-shadow: 0px 0px 0px 10px rgba(256,0,0,.2); }
+    100% { box-shadow: 0px 0px 0px 5px  rgba(256,0,0,.2); }
+} */
+
+@-webkit-keyframes breathe {
+    from { box-shadow: 0px 0px 0px 8px  rgb(247, 247, 247); }
+    10%  { box-shadow: 0px 0px 0px 15px rgb(247, 247, 247); }
+    33%  { box-shadow: 0px 0px 0px 7px  rgb(247, 247, 247); }
+    54%  { box-shadow: 0px 0px 0px 10px rgb(247, 247, 247); }
+    70% { box-shadow: 0px 0px 0px 20px  rgb(247, 247, 247); }
+    100% { box-shadow: 0px 0px 0px 5px  rgb(247, 247, 247); }
+}
+  
